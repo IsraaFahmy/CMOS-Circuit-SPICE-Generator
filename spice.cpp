@@ -6,13 +6,30 @@
 #include <stack>
 using namespace std; 
 
+
+string to_postfix(string & infix);
+bool a_perceed_b(char & a, char & b);
+
+int main()
+
+{
+	string in_usr, expression, postfix, net_list = "";
+	getline(cin, in_usr);
+	postfix = to_postfix(in_usr);
+	cout << postfix;
+
+
+	system("pause");
+	return 0;
+}
+
 string to_postfix(string & infix)
 {
 	string postfix;
 	char top = 0;
 	stack <char> Stack1;
 
-	for (int i = 0; i < infix.length(); i++)
+	for (unsigned int i = 0; i < infix.length(); i++)
 	{
 		if (infix[i] == '(')
 			Stack1.push(infix[i]);
@@ -20,7 +37,7 @@ string to_postfix(string & infix)
 		{
 			top = Stack1.top();
 			Stack1.pop();
-			while ( top != '(' && !Stack1.empty() )
+			while (top != '(' && !Stack1.empty())
 			{
 				postfix += top;
 				top = Stack1.top();
@@ -32,7 +49,7 @@ string to_postfix(string & infix)
 			if (!Stack1.empty())
 				top = Stack1.top();
 			while (!Stack1.empty() && a_perceed_b(top, infix[i]))
-			{	
+			{
 				top = Stack1.top();
 				Stack1.pop();
 				postfix += top;
@@ -62,21 +79,10 @@ bool a_perceed_b(char & a, char & b)
 	if (a == '\'' &&  b == '&' ||
 		a == '\'' &&  b == '|' ||
 		a == '&' &&  b == '|'
-		/*||
-		a == '\'' &&  b == '\'' ||
-		a == '&' &&  b == '&'   ||
-		a == '|' &&  b == '|'
-		*/
 		)
 		flag = true;
 
 	return flag;
 }
 
-int main()
 
-{
-
-
-return 0; 
-}
