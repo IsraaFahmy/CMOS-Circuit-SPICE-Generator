@@ -15,75 +15,82 @@ int op;
 /* op = 2: NAND */
 /* op = 3: NOT */
 
-void NOR(char &in1, char &in2, char &out);
-void NAND(char &in1, char &in2, char &out);
-void NOT(char &in1, char &out);
-void PDN(char &in1, char &in2, char &out);
-void PUN(char &in1, char &in2, char &out);
+void NOR(string &in1, string &in2, string &out);
+void NAND(string &in1, string &in2, string &out);
+void NOT(string &in1, string &out);
+void PDN(string &in1, string &in2, string &out);
+void PUN(string &in1, string &in2, string &out);
 string to_postfix(string & infix);
 bool a_perceed_b(char & a, char & b);
 
 int main()
 {
-	string in_usr, expression, postfix, net_list = "";
+	string in_usr, expression, postfix;
 	getline(cin, in_usr);
 	postfix = to_postfix(in_usr);
-	cout << postfix << endl;
-	//postfix.replace(0, 3, "israa");
 
-	int str_flag = postfix.length(); 
-	for(int i=0; i<str_flag;i++)
+	for(int i = 0; i < postfix.length(); i++)
 	{
 		if (postfix[i] == '&')
 		{
+		string temp = " ", out = " ";
+			string in1(1, postfix[i - 2]);
+			string in2(1, postfix[i - 1]);
 			op = 2;
-			char temp = ' '; 
-			char out; 
-			NAND(postfix[i - 2], postfix[i - 1], temp);
+			NOR(in1, in2, temp);
 			op = 3;
 			NOT(temp, out);
-			string rep(1, out);
-			postfix.replace(i - 2, i+1, rep);
-			cout << temp << endl; 
+			postfix.replace(i - 2, i + 1, out);
 		}
 		if (postfix[i] == '|')
 		{
+			string temp = " ", out = " ";
+			string in1(1, postfix[i - 2]);
+			string in2(1, postfix[i - 1]);
+			op = 1;
+			NOR(in1, in2, temp);
+			op = 3;
+			NOT(temp, out);
+			postfix.replace(i - 2, i + 1, out);
 		}
 		if (postfix[i] == '`')
 		{
-
+			string out = " ";
+			string in1(1, postfix[i - 1]);
+			op = 3;
+			NOT(in1, out);
+			postfix.replace(i - 1, i + 1, out);
 		}
 	}
-
-	cout << postfix << endl; 
-
+	
 	system("pause"); 
 	return 0; 
 }
 
-void NOR (char &in1, char &in2, char &out)
+
+void NOR (string &in1, string &in2, string &out)
 {
 	PUN(in1, in2, out);
 	PDN(in1, in2, out);
 	op = 0; 
 }
 
-void NAND (char &in1, char &in2, char &out)
+void NAND (string &in1, string &in2, string &out)
 {
 	PUN(in1, in2, out);
 	PDN(in1, in2, out);
 	op = 0;
 }
 
-void NOT(char &in1, char &out)
+void NOT(string &in1, string &out)
 {
-	char GND = '0'; 
+	string GND = "0"; 
 	PUN(in1, GND, out);
 	PDN(in1, GND, out);
 	op = 0;
 }
 
-void PDN (char &in1, char &in2, char &out)
+void PDN (string &in1, string &in2, string &out)
 { 
 	if (op == 1)   //NOR
 	{
@@ -91,26 +98,26 @@ void PDN (char &in1, char &in2, char &out)
 		cout << " M" << MOSFET_number << "  Y" << intermediate_out << "  " << in1 << "  " << "0" << "  " << "0" << "  NMOS" << endl;
 		MOSFET_number++; 
 		cout << " M" << MOSFET_number << "  Y" << intermediate_out << "  " << in2 << "  " << "0" << "  " << "0" << "  NMOS" << endl;
+		out = 'Y' + to_string(intermediate_out);
 	}
 	if (op == 2)   //NAND
 	{
 		MOSFET_number++;
 		intermediate_wire++; 
-		intermediate_out++;
 		cout << " M" << MOSFET_number << "  Y" << intermediate_out << "  " << in1 << "  " << intermediate_wire << "  " << intermediate_wire << "  NMOS" << endl;
 		MOSFET_number++;
-		intermediate_out++;
-		cout << " M" << MOSFET_number << "  Y" << intermediate_out << "  " << in2 << "  " << "0" << "  " << "0" << "  NMOS" << endl;
+		cout << " M" << MOSFET_number << "  " << intermediate_wire << "  " << in2 << "  " << "0" << "  " << "0" << "  NMOS" << endl;
+		out = 'Y' + to_string(intermediate_out);
 	}
 	if (op == 3)   //NOT
 	{
 		MOSFET_number++;
-		intermediate_wire++;
-		cout << " M" << MOSFET_number << "  Y" << intermediate_wire << "  " << in1 << "  " << "0" << "  " << "0" << "  NMOS" << endl;
+		cout << " M" << MOSFET_number << "  Y" << intermediate_out << "  " << in1 << "  " << "0" << "  " << "0" << "  NMOS" << endl;
+		out = 'Y' + to_string(intermediate_out);
 	}
 }
 
-void PUN (char &in1, char &in2, char &out)
+void PUN (string &in1, string &in2, string &out)
 {
 	if (op == 1)   //NOR
 	{
@@ -118,21 +125,22 @@ void PUN (char &in1, char &in2, char &out)
 		intermediate_wire++;
 		cout << " M" << MOSFET_number << "  " << intermediate_wire << "  " << in1 << "  " << "VDD" << "  " << "VDD" << "  PMOS" << endl;
 		MOSFET_number++;
-		cout << " M" << MOSFET_number << "  " << out << "  " << in2 << "  " << intermediate_wire << "  " << intermediate_wire << "  PMOS" << endl;
+		intermediate_out++;
+		cout << " M" << MOSFET_number << "  Y" << intermediate_out << "  " << in2 << "  " << intermediate_wire << "  " << intermediate_wire << "  PMOS" << endl;
 	}
 	if (op == 2)   //NAND
 	{
 		MOSFET_number++;
-		intermediate_wire++;
-		cout << " M" << MOSFET_number << "  Y" << intermediate_wire << "  " << in1 << "  " << "VDD" << "  " << "VDD" << "  PMOS" << endl;
+		intermediate_out++;
+		cout << " M" << MOSFET_number << "  Y" << intermediate_out << "  " << in1 << "  " << "VDD" << "  " << "VDD" << "  PMOS" << endl;
 		MOSFET_number++;
-		cout << " M" << MOSFET_number << "  Y" << intermediate_wire << "  " << in2 << "  " << "VDD" << "  " << "VDD" << "  PMOS" << endl;
+		cout << " M" << MOSFET_number << "  Y" << intermediate_out << "  " << in2 << "  " << "VDD" << "  " << "VDD" << "  PMOS" << endl;
 	}
 	if (op == 3)   //NOT
 	{
 		MOSFET_number++;
-		intermediate_wire++;
-		cout << " M" << MOSFET_number << "  Y" << intermediate_wire << "  " << in1 << "  " << "VDD" << "  " << "VDD" << "  PMOS" << endl;
+		intermediate_out++;
+		cout << " M" << MOSFET_number << "  Y" << intermediate_out << "  " << in1 << "  " << "VDD" << "  " << "VDD" << "  PMOS" << endl;
 	}
 }
 
