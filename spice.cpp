@@ -8,9 +8,9 @@
 using namespace std;
 
 int MOSFET_number = 0;
-int intermediate_wire = 0; 
+int intermediate_wire = 0;
 int intermediate_out = 0;
-int op; 
+int op;
 /* op = 1: NOR */
 /* op = 2: NAND */
 /* op = 3: NOT */
@@ -29,11 +29,11 @@ int main()
 	getline(cin, in_usr);
 	postfix = to_postfix(in_usr);
 
-	for(int i = 0; i < postfix.length(); i++)
+	for (int i = 0; i < postfix.length(); i++)
 	{
 		if (postfix[i] == '&')
 		{
-		string temp = " ", out = " ";
+			string temp = " ", out = " ";
 			string in1(1, postfix[i - 2]);
 			string in2(1, postfix[i - 1]);
 			op = 2;
@@ -62,20 +62,20 @@ int main()
 			postfix.replace(i - 1, i + 1, out);
 		}
 	}
-	
-	system("pause"); 
-	return 0; 
+
+	system("pause");
+	return 0;
 }
 
 
-void NOR (string &in1, string &in2, string &out)
+void NOR(string &in1, string &in2, string &out)
 {
 	PUN(in1, in2, out);
 	PDN(in1, in2, out);
-	op = 0; 
+	op = 0;
 }
 
-void NAND (string &in1, string &in2, string &out)
+void NAND(string &in1, string &in2, string &out)
 {
 	PUN(in1, in2, out);
 	PDN(in1, in2, out);
@@ -84,26 +84,26 @@ void NAND (string &in1, string &in2, string &out)
 
 void NOT(string &in1, string &out)
 {
-	string GND = "0"; 
+	string GND = "0";
 	PUN(in1, GND, out);
 	PDN(in1, GND, out);
 	op = 0;
 }
 
-void PDN (string &in1, string &in2, string &out)
-{ 
+void PDN(string &in1, string &in2, string &out)
+{
 	if (op == 1)   //NOR
 	{
-		MOSFET_number++; 
+		MOSFET_number++;
 		cout << " M" << MOSFET_number << "  Y" << intermediate_out << "  " << in1 << "  " << "0" << "  " << "0" << "  NMOS" << endl;
-		MOSFET_number++; 
+		MOSFET_number++;
 		cout << " M" << MOSFET_number << "  Y" << intermediate_out << "  " << in2 << "  " << "0" << "  " << "0" << "  NMOS" << endl;
 		out = 'Y' + to_string(intermediate_out);
 	}
 	if (op == 2)   //NAND
 	{
 		MOSFET_number++;
-		intermediate_wire++; 
+		intermediate_wire++;
 		cout << " M" << MOSFET_number << "  Y" << intermediate_out << "  " << in1 << "  " << intermediate_wire << "  " << intermediate_wire << "  NMOS" << endl;
 		MOSFET_number++;
 		cout << " M" << MOSFET_number << "  " << intermediate_wire << "  " << in2 << "  " << "0" << "  " << "0" << "  NMOS" << endl;
@@ -117,7 +117,7 @@ void PDN (string &in1, string &in2, string &out)
 	}
 }
 
-void PUN (string &in1, string &in2, string &out)
+void PUN(string &in1, string &in2, string &out)
 {
 	if (op == 1)   //NOR
 	{
@@ -144,7 +144,7 @@ void PUN (string &in1, string &in2, string &out)
 	}
 }
 
-string to_postfix(string & infix)  
+string to_postfix(string & infix)
 {
 	string postfix;
 	char top = 0;
