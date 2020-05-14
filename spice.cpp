@@ -95,24 +95,29 @@ void PDN(string &in1, string &in2, string &out)
 	if (op == 1)   //NOR
 	{
 		MOSFET_number++;
-		cout << " M" << MOSFET_number << "  Y" << intermediate_out << "  " << in1 << "  " << "0" << "  " << "0" << "  NMOS" << endl;
+		cout << " M" << MOSFET_number << "  Y" << intermediate_out << "  " << in1 << "  " << "0" << "  "
+		<< "0" << "  NMOS" << endl;
 		MOSFET_number++;
-		cout << " M" << MOSFET_number << "  Y" << intermediate_out << "  " << in2 << "  " << "0" << "  " << "0" << "  NMOS" << endl;
+		cout << " M" << MOSFET_number << "  Y" << intermediate_out << "  " << in2 << "  " << "0" << "  " 
+		<< "0" << "  NMOS" << endl;
 		out = 'Y' + to_string(intermediate_out);
 	}
 	if (op == 2)   //NAND
 	{
 		MOSFET_number++;
 		intermediate_wire++;
-		cout << " M" << MOSFET_number << "  Y" << intermediate_out << "  " << in1 << "  " << intermediate_wire << "  " << intermediate_wire << "  NMOS" << endl;
+		cout << " M" << MOSFET_number << "  Y" << intermediate_out << "  " << in1 << "  " << intermediate_wire 
+		<< "  " << intermediate_wire << "  NMOS" << endl;
 		MOSFET_number++;
-		cout << " M" << MOSFET_number << "  " << intermediate_wire << "  " << in2 << "  " << "0" << "  " << "0" << "  NMOS" << endl;
+		cout << " M" << MOSFET_number << "  " << intermediate_wire << "  " << in2 << "  " << "0" << "  " << "0" 
+		<< "  NMOS" << endl;
 		out = 'Y' + to_string(intermediate_out);
 	}
 	if (op == 3)   //NOT
 	{
 		MOSFET_number++;
-		cout << " M" << MOSFET_number << "  Y" << intermediate_out << "  " << in1 << "  " << "0" << "  " << "0" << "  NMOS" << endl;
+		cout << " M" << MOSFET_number << "  Y" << intermediate_out << "  " << in1 << "  " << "0" << "  " << "0" 
+		<< "  NMOS" << endl;
 		out = 'Y' + to_string(intermediate_out);
 	}
 }
@@ -123,24 +128,29 @@ void PUN(string &in1, string &in2, string &out)
 	{
 		MOSFET_number++;
 		intermediate_wire++;
-		cout << " M" << MOSFET_number << "  " << intermediate_wire << "  " << in1 << "  " << "VDD" << "  " << "VDD" << "  PMOS" << endl;
+		cout << " M" << MOSFET_number << "  " << intermediate_wire << "  " << in1 << "  " << "VDD" << "  " 
+		<< "VDD" << "  PMOS" << endl;
 		MOSFET_number++;
 		intermediate_out++;
-		cout << " M" << MOSFET_number << "  Y" << intermediate_out << "  " << in2 << "  " << intermediate_wire << "  " << intermediate_wire << "  PMOS" << endl;
+		cout << " M" << MOSFET_number << "  Y" << intermediate_out << "  " << in2 << "  " << intermediate_wire 
+		<< "  " << intermediate_wire << "  PMOS" << endl;
 	}
 	if (op == 2)   //NAND
 	{
 		MOSFET_number++;
 		intermediate_out++;
-		cout << " M" << MOSFET_number << "  Y" << intermediate_out << "  " << in1 << "  " << "VDD" << "  " << "VDD" << "  PMOS" << endl;
+		cout << " M" << MOSFET_number << "  Y" << intermediate_out << "  " << in1 << "  " << "VDD" << "  " 
+		<< "VDD" << "  PMOS" << endl;
 		MOSFET_number++;
-		cout << " M" << MOSFET_number << "  Y" << intermediate_out << "  " << in2 << "  " << "VDD" << "  " << "VDD" << "  PMOS" << endl;
+		cout << " M" << MOSFET_number << "  Y" << intermediate_out << "  " << in2 << "  " << "VDD" << "  " 
+		<< "VDD" << "  PMOS" << endl;
 	}
 	if (op == 3)   //NOT
 	{
 		MOSFET_number++;
 		intermediate_out++;
-		cout << " M" << MOSFET_number << "  Y" << intermediate_out << "  " << in1 << "  " << "VDD" << "  " << "VDD" << "  PMOS" << endl;
+		cout << " M" << MOSFET_number << "  Y" << intermediate_out << "  " << in1 << "  " << "VDD" << "  "
+		<< "VDD" << "  PMOS" << endl;
 	}
 }
 
